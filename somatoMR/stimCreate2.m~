@@ -8,11 +8,13 @@
 %3: proximal right
 %4: distal right
 
-function [stims] = stimCreate2(condLength, stimFreq)
+function [stim] = stimCreate2(condLength, stimFreq)
 
 sampleRate = 8192;
 
-stimArray = zeros(4, sampleRate * condLength);
+arrayLength = floor(sampleRate * condLength);
+
+stimArray = zeros(4, arrayLength);
 
 %Stimulus sequence
 
@@ -28,7 +30,7 @@ stim.cond4 = stimArray;
 
 %stimulus sine wave
 
-stimWave = sin(stimFreq * (1: (condLength * sampleRate)));
+stimWave = sin(stimFreq * (1:2*pi/(8192 - 1)): condLength*2*pi/(8192));
 onLength = length(stimWave);
 
 %cycle 1
@@ -36,15 +38,16 @@ stim.cond1(1, 1:onLength) = stimWave;
 stim.cond1(2, 1:onLength) = stimWave;
     
 %cycle 2
-stim.cond1(1, 1:onLength) = stimWave;
-stim.cond1(2, 1:onLength) = stimWave;
+stim.cond2(2, 1:onLength) = stimWave;
+stim.cond2(3, 1:onLength) = stimWave;
 
 %cycle 3
-stim.cond1(1, 1:onLength) = stimWave;
-stim.cond1(2, 1:onLength) = stimWave;
+stim.cond3(3, 1:onLength) = stimWave;
+stim.cond3(4, 1:onLength) = stimWave;
 
 
 %cycle 4
-stimArray(4, ((3*onLength + 1):(onLength + 3*onLength))) = stimWave;
-stimArray(1, ((3*onLength + 1):(onLength + 3*onLength))) = stimWave;
+stim.cond4(4, 1:onLength) = stimWave;
+stim.cond4(1, 1:onLength) = stimWave;
 
+end

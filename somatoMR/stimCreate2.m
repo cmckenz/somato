@@ -12,7 +12,9 @@ function [stim] = stimCreate2(condLength, stimFreq)
 
 sampleRate = 8192;
 
-stimArray = zeros(4, sampleRate * condLength);
+arrayLength = floor(sampleRate * condLength);
+
+stimArray = zeros(4, arrayLength);
 
 %Stimulus sequence
 
@@ -28,7 +30,7 @@ stim.cond4 = stimArray;
 
 %stimulus sine wave
 
-stimWave = sin(stimFreq * (1: (condLength * sampleRate)));
+stimWave = sin(stimFreq * ((1:2*pi/(8192 - 1): condLength*2*pi)));
 onLength = length(stimWave);
 
 %cycle 1

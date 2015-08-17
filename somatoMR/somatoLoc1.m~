@@ -10,16 +10,9 @@ if ~any(nargin == [0])
 end
 
 global stimulus
-
+myscreen = struct;
 stimulus.counter = 1; % This keeps track of what "run" we are on.
 stimulus.scan = 1
-
-if stimulus.scan && ~mglGetParam('ignoreInitialVols')==16 && ~mglGetParam('ignoreInitialVols')==4
-    warning('ignoreInitialVols is set to %i.',mglGetParam('ignoreInitialVols'));
-    if ~strcmp('y',input('Is this correct? [y/n]'))
-        mglSetParam('ignoreInitialVols',input('Please input the correct value (mux8 = 16, mux2 = 4): '));
-    end
-end
 
 
 
@@ -27,24 +20,39 @@ end
 
 myscreen = initStimulus('stimulus',myscreen);
 
-if stimulus.scan
-    stimulus.responseKeys = [1 2]; % corresponds to LEFT - RIGHT
-else
-    stimulus.responseKeys = [1 2]; % corresponds to LEFT - RIGHT
-end
 
 
 %% task parameters
-task{1}.waitForBacktick = 1;
+
+task{1}.parameter.condLength = 1;
 task{1}.segmin = [6 6 6 6];
 task{1}.segmax = [6 6 6 6];
 task{1}.synchToVol = [0 0 0 1];
 task{1}.getResponse = [0 0 0 0];
-task{1}.parameter
+task{1}.parameter.freq = 80;
+task{1}.parameter.condLength = 6.6;
 
 task{1}.random = 0;
 
 task{1}.numBlocks = 10; %12 blocks per session
+
+%create stims
+
+sounds = stimCreate2(task{1}.parameter.condLength, task{1}.parameter.freq);
+
+cond1 = mglInstallSound(sounds.cond1);
+cond2 = mglInstallSound(sounds.cond2);
+cond3 = mglInstallSound(sounds.cond3);
+cond4 = mglInstallSound(sounds.cond4);
+
+mglSetSound(cond1, 'deviceID', deviceID);
+mglSetSound(cond2, 'deviceID', deviceID);
+mglSetSound(cond3, 'deviceID', deviceID);
+mglSetSound(cond4, 'deviceID', deviceID);
+
+
+
+
 
 %%
 
