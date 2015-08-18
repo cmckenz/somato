@@ -32,7 +32,7 @@ task{1}{1}.waitForBacktick = 1;
 task{1}{1}.parameter.condLength = condLength;
 task{1}{1}.parameter.condLength = 1;
 task{1}{1}.seglen = [condLength condLength condLength condLength];
-task{1}{1}.synchToVol = [0 0 0 1];
+task{1}{1}.synchToVol = [1 1 1 1];
 task{1}{1}.getResponse = [0 0 0 0];
 task{1}{1}.parameter.freq = 80;
 task{1}{1}.parameter.condLength = 6.6;
@@ -43,7 +43,7 @@ task{1}{1}.numTrials = 10; % Total volumes: 10 * 6 * 4 = 240 + 16 (calib)
 
 %create stims
 
-sounds = stimCreate2(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
+sounds = stimCreateBlock2On(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
 
 stimulus.cond1 = mglInstallSound(sounds.cond1);
 stimulus.cond2 = mglInstallSound(sounds.cond2);
@@ -75,6 +75,11 @@ while (phaseNum <= length(task{1})) && ~myscreen.userHitEsc
     % flip screen
     myscreen = tickScreen(myscreen,task);
 end
+
+
+
+% if we got here, we are at the end of the experiment
+myscreen = endTask(myscreen,task);
 
 %%
 
