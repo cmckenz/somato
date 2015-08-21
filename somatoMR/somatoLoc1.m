@@ -114,3 +114,16 @@ if task.thistrial.thisseg == 4
     mglPlaySound(stimulus.cond4)
 end
 
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% function to init the stimulus
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function stimulus = myInitStimulus(stimulus,myscreen,task,stimfile)
+
+% determine pedestals
+params = getTaskParameters(myscreen,task);
+
+stimfile = [];
+
+
+
