@@ -1,0 +1,25 @@
+% make a waveform for the localizer experiment
+
+%lower number stimulators are proximal, first set (ch 1 + 2) on left arm,
+%second set (ch 3 and 4) on right arm.
+
+%1: proximal left
+%2: distal left
+%3: proximal right
+%4: distal right
+
+function [stimArray] = makeSpatialStim(stimulatorA, stimulatorB, stimFreq, stimDelta, eventLength)
+
+sampleRate = 8192;
+
+arrayLength = floor(sampleRate * (stimDelta + offset + 2*eventLength)+1;
+
+stimArray = zeros(4, arrayLength);
+
+
+%stimulus sine wave
+
+stimWave = sin(stimFreq * ((1:2*pi/(8192 - 1): condLength*2*pi)));
+
+
+end

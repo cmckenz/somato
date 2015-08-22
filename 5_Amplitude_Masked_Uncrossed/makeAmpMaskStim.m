@@ -1,15 +1,17 @@
-function [ampStim] = makeAmpMaskStim(offset, ampMid, ampUp, Lbase, maskHigh, maskDelta, maskR, eventLength, freq)
+function [ampStim] = makeAmpMaskStim(offset, ampMid, ampDiff, Lbase, maskHigh, maskDelta, maskR, eventLength, freq)
 
 %Assign R high and low
+
 if Lbase
-    ampL = ampMid;
-    ampR = ampMid + ampUp;
-end
+   ampR = ampMid + ampDiff;
+   ampL = ampMid - ampDiff;
+end 
 
 if ~Lbase
-   ampR = ampMid;
-   ampL = ampMid + ampUp;
+   ampR = ampMid - ampDiff;
+   ampL = ampMid + ampDiff;
 end 
+
 
 %check we aren't scaling the sine wave up above max amplitude
 if any([abs(ampL), abs(ampR)] > 1)

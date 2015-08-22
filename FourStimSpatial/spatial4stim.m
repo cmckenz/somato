@@ -14,15 +14,12 @@
 % MAKE SURE LEFT HAND GETS STIMULATOR ONE
 
 
-%makeAmpStim(offset, ampMid, ampDiff, Lbase, eventLength, freq)
-
 %1: proximal stimulator
 
-function myscreen = somAmp()
+function myscreen = spatial4stim()
 
-%set device ID
 global deviceID
-deviceID = 1;
+deviceID = 1; %specify deviceID
 
 % check arguments
 if ~any(nargin == [0])
@@ -55,14 +52,15 @@ task{1}.parameter.offset = 0.1;
 task{1}.parameter.eventLength = 0.01;
 task{1}.parameter.freq = 60;
 
+deltas = [0.015, 0.03, 0.05, 0.1, 0.15, 0.3, 0.5];
+
 %variable stimulus parameter - gap between two middle stimulations
-task{1}.parameter.ampMid = [0.5 0.7];
-task{1}.parameter.ampDiff = [0.1 0.3];
-task{1}.parameter.Lbase = [0 1];
+task{1}.parameter.delta = [-1*flipdim(deltas,2) deltas];
 
 
 
 task{1}.randVars.calculated.choice = nan;
+
 task{1}.random = 1;
 
 % initialize the task
@@ -97,34 +95,41 @@ myscreen = endTask(myscreen,task);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [task myscreen] = startSegmentCallback(task, myscreen)
 
-global s;
+    global s
+%global stimulus;
 
 if task.thistrial.thisseg == 1
-  % time, so that we can preciesly set the two stimulation intervals
+  % time, so that we can precisely set the two stimulation intervals
   %timeNow = mglGetSecs;
   
   % stimulus parameters
   offset = task.thistrial.offset;
-  ampMid = task.thistrial.ampMid;
-  ampDiff = task.thistrial.ampDiff;
-  Lbase = task.thistrial.Lbase;
+  deltaN = task.thistrial.delta;
   eventLength = task.thistrial.eventLength;
   freq = task.thistrial.freq;
 
-  [trialStim] = makeAmpStim(offset, ampMid, ampDiff, Lbase, eventLength, freq);
-  
-  
-  
+  [trialStim] = makeTimingStim(offset, deltaN, eventLength, freq);
+    
   s = mglInstallSound(trialStim);
-  mglSetSound(s, 'deviceID', deviceID)
+  mglSetSound(s, 'deviceID', deviceID);
   
 end
 
-if task.thistrial.thisseg == 2
+if task.thistrial.thisseg == 2  
     mglPlaySound(s);
 end
 
 
+% if task.thistrial.thisseg == 3
+%   % no response
+%   if isnan(task.thistrial.correct)
+%     task.thistrial.correct = false;
+%     % update appropriate staircase
+%     staircaseNum = find(stimulus.pedestal==task.thistrial.pedestal);
+%     stimulus.s(staircaseNum) = doStaircase('update',stimulus.s(staircaseNum),task.thistrial.correct);
+%     %  threshold = doStaircase('threshold',stimulus.s(staircaseNum));
+%     disp(sprintf('  No response. Delta: %0.2f',task.thistrial.delta));
+%   end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,7 +173,7 @@ if task.thistrial.gotResponse < 1
     end
     
     if crossed
-        task.thistrial.choice = ~task.thistrial.response;
+        task.thistrial.choice = ~task.thistrial.choice;
     end
     
     task = jumpSegment(task);
@@ -191,7 +196,3 @@ stimfile = [];
 end
 
 end
-
-  
-
-

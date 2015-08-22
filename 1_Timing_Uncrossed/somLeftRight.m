@@ -18,6 +18,9 @@
 
 function myscreen = somLeftRight()
 
+global deviceID
+deviceID = 1; %specify deviceID
+
 % check arguments
 if ~any(nargin == [0])
   help taskTemplate
@@ -38,15 +41,14 @@ crossed = 0;
 stimfile = getLastStimfile(myscreen,'stimfileNum=-1');
 
 % task parameters
-task{1}.waitForBacktick = 1;
-task{1}.segmin = [1.5 2 1];
-task{1}.segmax = [1.5 2 9];
+task{1}.waitForBacktick = 0;
+task{1}.seglen = [0.5 2 1];
 task{1}.synchToVol = [0 0 0];
 task{1}.getResponse = [0 1 0];
-task{1}.numBlocks = 6; %12 blocks per session
+task{1}.numBlocks = 20; %12 blocks per session
 
 %fixed stimulus parameters
-task{1}.parameter.offset = 0.3;
+task{1}.parameter.offset = 0.1;
 task{1}.parameter.eventLength = 0.01;
 task{1}.parameter.freq = 60;
 
@@ -60,18 +62,6 @@ task{1}.parameter.delta = [-1*flipdim(deltas,2) deltas];
 task{1}.randVars.calculated.choice = nan;
 
 task{1}.random = 1;
-
-%TESTING FLAG... REDUCES SEG LENGTHS, KILLS BACKTICK
-testing = true;
-
-if testing
-  task{1}.waitForBacktick = 0;
-  task{1}.segmin = [1 2 0.5];
-  task{1}.segmax = [1 2 1.5];
-% task{1}.parameter.pedestal = [-1 0.5 0.25 0.125 0];
-% task{1}.parameter.pedestal = [-1 0.5];
-  task{1}.synchToVol = [0 0 0];
-end
 
 % initialize the task
 for phaseNum = 1:length(task)
@@ -105,10 +95,11 @@ myscreen = endTask(myscreen,task);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [task myscreen] = startSegmentCallback(task, myscreen)
 
+    global s
 %global stimulus;
 
 if task.thistrial.thisseg == 1
-  % time, so that we can preciesly set the two stimulation intervals
+  % time, so that we can precisely set the two stimulation intervals
   %timeNow = mglGetSecs;
   
   % stimulus parameters
@@ -118,11 +109,16 @@ if task.thistrial.thisseg == 1
   freq = task.thistrial.freq;
 
   [trialStim] = makeTimingStim(offset, deltaN, eventLength, freq);
-  
-  
-  sound(trialStim)
+    
+  s = mglInstallSound(trialStim);
+  mglSetSound(s, 'deviceID', deviceID);
   
 end
+
+if task.thistrial.thisseg == 2  
+    mglPlaySound(s);
+end
+
 
 % if task.thistrial.thisseg == 3
 %   % no response

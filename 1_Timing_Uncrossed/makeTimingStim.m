@@ -27,4 +27,3 @@ somEvents = {};
 
 timeStim = somTrial(somEvents, 8192);
 
-sound(timeStim, 8192)

@@ -14,11 +14,15 @@
 % MAKE SURE LEFT HAND GETS STIMULATOR ONE
 
 
-%[ampStim] = makeAmpMaskStim(offset, ampMid, ampUp, Lbase, maskHigh, maskDelta, maskR, eventLength, freq)
+%[ampStim] = makeAmpMaskStim(offset, ampMid, ampDiff, Lbase, maskHigh, maskDelta, maskR, eventLength, freq)
 
 %1: proximal stimulator
 
 function myscreen = somAmpMasked()
+
+%set device ID for sound output
+global deviceID;
+deviceID = 1;
 
 % check arguments
 if ~any(nargin == [0])
@@ -40,22 +44,21 @@ crossed = 0;
 stimfile = getLastStimfile(myscreen,'stimfileNum=-1');
 
 % task parameters
-task{1}.waitForBacktick = 1;
-task{1}.segmin = [1.5 2 1];
-task{1}.segmax = [1.5 2 9];
+task{1}.waitForBacktick = 0;
+task{1}.seglen = [0.5 2 1];
 task{1}.synchToVol = [0 0 0];
 task{1}.getResponse = [0 1 0];
 task{1}.numBlocks = 1; %12 blocks per session
 
 %fixed stimulus parameters
-task{1}.parameter.offset = 0.3;
+task{1}.parameter.offset = 0.1;
 task{1}.parameter.eventLength = 0.01;
 task{1}.parameter.freq = 60;
 
 %variable stimulus parameter - gap between two middle stimulations
-task{1}.parameter.ampMid = [0.3 0.4 0.5 0.6 0.7];
-task{1}.parameter.ampUp = [0.1 0.2 0.3];
-task{1}.parameter.maskDelta = [0.03, 0.05, 0.1, 0.2, 0.3];
+task{1}.parameter.ampMid = [0.5 0.7];
+task{1}.parameter.ampDiff = [0.1 0.3];
+task{1}.parameter.maskDelta = [0.015, 0.03, 0.05, 0.1, 0.15, 0.3, 0.5];
 
 task{1}.parameter.Lbase = [0 1];
 task{1}.parameter.maskHigh = [0 1];
@@ -64,18 +67,6 @@ task{1}.parameter.maskR = [0 1];
 task{1}.randVars.calculated.choice = nan;
 
 task{1}.random = 1;
-
-%TESTING FLAG... REDUCES SEG LENGTHS, KILLS BACKTICK
-testing = true;
-
-if testing
-  task{1}.waitForBacktick = 0;
-  task{1}.segmin = [1 2 0.5];
-  task{1}.segmax = [1 2 1.5];
-% task{1}.parameter.pedestal = [-1 0.5 0.25 0.125 0];
-% task{1}.parameter.pedestal = [-1 0.5];
-  task{1}.synchToVol = [0 0 0];
-end
 
 % initialize the task
 for phaseNum = 1:length(task)
@@ -109,7 +100,7 @@ myscreen = endTask(myscreen,task);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [task myscreen] = startSegmentCallback(task, myscreen)
 
-%global stimulus;
+global s;
 
 if task.thistrial.thisseg == 1
   % time, so that we can preciesly set the two stimulation intervals
@@ -118,7 +109,7 @@ if task.thistrial.thisseg == 1
   % stimulus parameters
   offset = task.thistrial.offset;
   ampMid = task.thistrial.ampMid;
-  ampUp = task.thistrial.ampUp;
+  ampDiff = task.thistrial.ampDiff;
   Lbase = task.thistrial.Lbase;
   maskHigh = task.thistrial.maskHigh;
   maskDelta = task.thistrial.maskDelta;
@@ -127,15 +118,17 @@ if task.thistrial.thisseg == 1
   eventLength = task.thistrial.eventLength;
   freq = task.thistrial.freq;
 
-[trialStim] = makeAmpMaskStim(offset, ampMid, ampUp, Lbase, maskHigh, maskDelta, maskR, eventLength, freq);
+[trialStim] = makeAmpMaskStim(offset, ampMid, ampDiff, Lbase, maskHigh, maskDelta, maskR, eventLength, freq);
   
-  
-  
-  sound(trialStim)
+  s = mglInstallSound(trialStim);
+  mglSetSound(s, 'deviceID', deviceID);
   
 end
 
-% if task.thistrial.thisseg == 3
+if task.thistrial.thisseg == 2
+    mglPlaySound(s)
+end
+    
 %   % no response
 %   if isnan(task.thistrial.correct)
 %     task.thistrial.correct = false;

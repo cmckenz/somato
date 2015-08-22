@@ -1,10 +1,10 @@
 % somLeftRight.m
 %
 %        $Id:$ 
-%      usage: somAmpCrossed()
+%      usage: somLeftRight()
 %         by: cameron mckenzie (edited from justin gardner 'somdis')
 %       date: 06/22/15
-%    purpose: Crossed Hands Somatosensory Amplitude Discrimination
+%    purpose: Perceptual merging somato experiment
 %
 
 % [mergeStim] = makeMergeStim(offset, delta, eventLength, condition, freq)
@@ -14,11 +14,15 @@
 % MAKE SURE LEFT HAND GETS STIMULATOR ONE
 
 
-%makeAmpStim(offset, ampMid, ampUp, Lbase, eventLength, freq)
+%makeAmpStim(offset, ampMid, ampDiff, Lbase, eventLength, freq)
 
 %1: proximal stimulator
 
 function myscreen = somAmpCrossed()
+
+%set device ID
+global deviceID
+deviceID = 1;
 
 % check arguments
 if ~any(nargin == [0])
@@ -40,40 +44,26 @@ crossed = 1;
 stimfile = getLastStimfile(myscreen,'stimfileNum=-1');
 
 % task parameters
-task{1}.waitForBacktick = 1;
-task{1}.segmin = [1.5 2 1];
-task{1}.segmax = [1.5 2 9];
+task{1}.waitForBacktick = 0;
+task{1}.seglen = [0.5 2 1];
 task{1}.synchToVol = [0 0 0];
 task{1}.getResponse = [0 1 0];
-task{1}.numBlocks = 6; %12 blocks per session
+task{1}.numBlocks = 20; %12 blocks per session
 
 %fixed stimulus parameters
-task{1}.parameter.offset = 0.3;
+task{1}.parameter.offset = 0.1;
 task{1}.parameter.eventLength = 0.01;
 task{1}.parameter.freq = 60;
 
 %variable stimulus parameter - gap between two middle stimulations
-task{1}.parameter.ampMid = [0.3 0.4 0.5 0.6 0.7];
-task{1}.parameter.ampUp = [0.1 0.2 0.3];
+task{1}.parameter.ampMid = [0.5 0.7];
+task{1}.parameter.ampDiff = [0.1 0.3];
 task{1}.parameter.Lbase = [0 1];
 
 
 
 task{1}.randVars.calculated.choice = nan;
-
 task{1}.random = 1;
-
-%TESTING FLAG... REDUCES SEG LENGTHS, KILLS BACKTICK
-testing = true;
-
-if testing
-  task{1}.waitForBacktick = 0;
-  task{1}.segmin = [1 2 0.5];
-  task{1}.segmax = [1 2 1.5];
-% task{1}.parameter.pedestal = [-1 0.5 0.25 0.125 0];
-% task{1}.parameter.pedestal = [-1 0.5];
-  task{1}.synchToVol = [0 0 0];
-end
 
 % initialize the task
 for phaseNum = 1:length(task)
@@ -107,7 +97,7 @@ myscreen = endTask(myscreen,task);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [task myscreen] = startSegmentCallback(task, myscreen)
 
-%global stimulus;
+global s;
 
 if task.thistrial.thisseg == 1
   % time, so that we can preciesly set the two stimulation intervals
@@ -116,29 +106,25 @@ if task.thistrial.thisseg == 1
   % stimulus parameters
   offset = task.thistrial.offset;
   ampMid = task.thistrial.ampMid;
-  ampUp = task.thistrial.ampUp;
+  ampDiff = task.thistrial.ampDiff;
   Lbase = task.thistrial.Lbase;
   eventLength = task.thistrial.eventLength;
   freq = task.thistrial.freq;
 
-  [trialStim] = makeAmpStim(offset, ampMid, ampUp, Lbase, eventLength, freq);
+  [trialStim] = makeAmpStim(offset, ampMid, ampDiff, Lbase, eventLength, freq);
   
   
   
-  sound(trialStim)
+  s = mglInstallSound(trialStim);
+  mglSetSound(s, 'deviceID', deviceID)
   
 end
 
-% if task.thistrial.thisseg == 3
-%   % no response
-%   if isnan(task.thistrial.correct)
-%     task.thistrial.correct = false;
-%     % update appropriate staircase
-%     staircaseNum = find(stimulus.pedestal==task.thistrial.pedestal);
-%     stimulus.s(staircaseNum) = doStaircase('update',stimulus.s(staircaseNum),task.thistrial.correct);
-%     %  threshold = doStaircase('threshold',stimulus.s(staircaseNum));
-%     disp(sprintf('  No response. Delta: %0.2f',task.thistrial.delta));
-%   end
+if task.thistrial.thisseg == 2
+    mglPlaySound(s);
+end
+
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -206,5 +192,4 @@ end
 
 end
 
-
-
+  
