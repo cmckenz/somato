@@ -3,7 +3,7 @@ function [myscreen] = somatoLocEvent4()
 %calls
 
 %SET DEVICE ID HERE
-deviceID = 5;
+deviceID = 1;
 
 
 % check arguments
@@ -70,7 +70,7 @@ mglSetSound(stimulus.cond4, 'deviceID', deviceID);
 
 % initialize the task
 %INIITALIZE ALL TASKS HERE
-for phaseNum = 1:length(task)
+for phaseNum = 1:length(task{1})
   [task{1}{phaseNum} myscreen] = initTask(task{1}{phaseNum},myscreen,@startSegmentCallback1,@screenUpdateCallback,[],@startTrialCallback,[],[]);
   [task{2}{phaseNum} myscreen] = initTask(task{2}{phaseNum},myscreen,@startSegmentCallback2,@screenUpdateCallback,[],@startTrialCallback,[],[]);
   [task{3}{phaseNum} myscreen] = initTask(task{3}{phaseNum},myscreen,@startSegmentCallback3,@screenUpdateCallback,[],@startTrialCallback,[],[]);
@@ -116,9 +116,11 @@ if task.thistrial.thisseg == 1
       %play stim cond 1
       mglPlaySound(stimulus.cond1)
 end
-end
+
 
 function [task myscreen] = startSegmentCallback2(task, myscreen)
+
+global stimulus
 
     
     if task.thistrial.thisseg == 1
@@ -126,22 +128,26 @@ function [task myscreen] = startSegmentCallback2(task, myscreen)
       mglPlaySound(stimulus.cond2)
     end
     
-end
+
     
 function [task myscreen] = startSegmentCallback3(task, myscreen)
+
+global stimulus
+
 
     if task.thistrial.thisseg == 3
       %play stim cond 1
       mglPlaySound(stimulus.cond3)
     end
-end
+
     
 function [task myscreen] = startSegmentCallback4(task, myscreen)
+
+global stimulus
 
     if task.thistrial.thisseg == 4
       %play stim cond 1
       mglPlaySound(stimulus.cond4)
     end
-    
-end
+   
 
