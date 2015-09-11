@@ -3,7 +3,7 @@ function [myscreen] = somatoLocEvent1()
 
 
 %SET DEVICE ID HERE
-deviceID = 3;
+deviceID = 5;
 
 
 % check arguments

@@ -3,7 +3,7 @@ function [myscreen] = somatoLocEvent4()
 %calls
 
 %SET DEVICE ID HERE
-deviceID = 1;
+deviceID = 5;
 
 
 % check arguments
@@ -71,10 +71,10 @@ mglSetSound(stimulus.cond4, 'deviceID', deviceID);
 % initialize the task
 %INIITALIZE ALL TASKS HERE
 for phaseNum = 1:length(task{1})
-  [task{1}{phaseNum} myscreen] = initTask(task{1}{phaseNum},myscreen,@startSegmentCallback1,@screenUpdateCallback,[],@startTrialCallback,[],[]);
-  [task{2}{phaseNum} myscreen] = initTask(task{2}{phaseNum},myscreen,@startSegmentCallback2,@screenUpdateCallback,[],@startTrialCallback,[],[]);
-  [task{3}{phaseNum} myscreen] = initTask(task{3}{phaseNum},myscreen,@startSegmentCallback3,@screenUpdateCallback,[],@startTrialCallback,[],[]);
-  [task{4}{phaseNum} myscreen] = initTask(task{4}{phaseNum},myscreen,@startSegmentCallback4,@screenUpdateCallback,[],@startTrialCallback,[],[]);
+  [task{1}{phaseNum} myscreen] = initTask(task{1}{phaseNum},myscreen,@startSegmentCallback1,@screenUpdateCallback,[],@startTrialCallback1,[],[]);
+  [task{2}{phaseNum} myscreen] = initTask(task{2}{phaseNum},myscreen,@startSegmentCallback2,@screenUpdateCallback,[],@startTrialCallback2,[],[]);
+  [task{3}{phaseNum} myscreen] = initTask(task{3}{phaseNum},myscreen,@startSegmentCallback3,@screenUpdateCallback,[],@startTrialCallback3,[],[]);
+  [task{4}{phaseNum} myscreen] = initTask(task{4}{phaseNum},myscreen,@startSegmentCallback4,@screenUpdateCallback,[],@startTrialCallback4,[],[]);
 end
 
 phaseNum = 1;
@@ -104,9 +104,21 @@ myscreen = endTask(myscreen,task);
 function [task myscreen] = screenUpdateCallback(task, myscreen)
 mglClearScreen();
 
-function [task myscreen] = startTrialCallback(task,myscreen)
+function [task myscreen] = startTrialCallback1(task,myscreen)
 
-disp('(somato) Running trial.');
+disp('(somato) Running trial - stream 1.');
+
+function [task myscreen] = startTrialCallback2(task,myscreen)
+
+disp('(somato) Running trial - stream 2.');
+
+function [task myscreen] = startTrialCallback3(task,myscreen)
+
+disp('(somato) Running trial - stream 3.');
+
+function [task myscreen] = startTrialCallback4(task,myscreen)
+
+disp('(somato) Running trial - stream 4.');
 
 function [task myscreen] = startSegmentCallback1(task, myscreen)
 
