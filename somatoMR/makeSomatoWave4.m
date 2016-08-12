@@ -5,7 +5,7 @@
 %          1 reversed stimulus order
 
 
-function [stim] = makeSomatoWave3(stimFreq, reverse)
+function [stim] = makeSomatoWave4(stimFreq, reverse)
 
 onTime = 0.45;
 offTime = 0.1;
@@ -31,6 +31,7 @@ stimArray = zeros(4, arrayLength);
 stim.cond1 = stimArray;
 stim.cond2 = stimArray;
 stim.cond3 = stimArray;
+stim.cond4 = stimArray;
 
 %stimulus sine wave
 
@@ -38,31 +39,33 @@ onLength = length(stimWave);
 
 
 if reverse == 0
-%cycle 1
-stim.cond1(1, :) = stimWave;
+    %cycle 1
+    stim.cond1(1, :) = stimWave;
     
-%cycle 2
-stim.cond2(2, :) = stimWave;
-
-%cycle 3
-stim.cond3(3, :) = stimWave;
-
-%cycle 4
-stim.cond4(4, :) = stimWave;
+    %cycle 2
+    stim.cond2(2, :) = stimWave;
+    
+    %cycle 3
+    stim.cond3(3, :) = stimWave;
+    
+    %cycle 4
+    stim.cond3(4, :) = stimWave;
+    
+    
 end
 
 if reverse == 1
-%cycle 1
-stim.cond1(4, :) = stimWave;
+    %cycle 2
+    stim.cond1(4, :) = stimWave;
     
-%cycle 2
-stim.cond2(3, :) = stimWave;
+    %cycle 2
+    stim.cond2(3, :) = stimWave;
+    
+    %cycle 3
+    stim.cond3(2, :) = stimWave;
 
-%cycle 3
-stim.cond3(2, :) = stimWave;
-
-%cycle 4
-stim.cond4(1, :) = stimWave;
+    %cycle 4
+    stim.cond4(1, :) = stimWave;
 
 end
 
