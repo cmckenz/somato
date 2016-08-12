@@ -3,7 +3,7 @@ function [myscreen] = somLocTW(reverse)
 
 %SET DEVICE ID HERE
 deviceID = 5;
-
+amp = 3;
 
 % % check arguments
 % if ~any(nargin == [0])
@@ -34,11 +34,11 @@ task{1}{1}.parameter.freq = 30;
 
 task{1}{1}.random = 0;
 
-task{1}{1}.numTrials = 10; % Total volumes: 10 * 6 * 4 = 240 + 16 (calib)
+task{1}{1}.numBlocks = 20; % Total volumes: 20 * 3 * 7 = 420 + 16 (calib) = 436
 
 %create stims
 
-sounds = makeSomatoWave3(task{1}{1}.parameter.freq, reverse);
+sounds = makeSomatoWave3(task{1}{1}.parameter.freq, reverse, amp);
 
 stimulus.cond1 = mglInstallSound(sounds.cond1);
 stimulus.cond2 = mglInstallSound(sounds.cond2);
