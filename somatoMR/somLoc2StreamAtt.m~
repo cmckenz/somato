@@ -3,6 +3,7 @@ function [myscreen] = somLoc2StreamAtt()
 %calls
 
 %SET DEVICE ID HERE
+deviceID = 4;
 
 
 % check arguments
@@ -12,7 +13,6 @@ if ~any(nargin == [0])
 end
 
 global stimulus
-stimulus.deviceID = 4;
 stimulus.counter = 1; % This keeps track of what "run" we are on.
 stimulus.scan = 1
 
@@ -47,7 +47,15 @@ task{2}{1} = task{1}{1};
 
 %create stims
 
-stimulus.sounds = stimCreateOneEvent2Str(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
+sounds = stimCreateOneEvent2Str(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
+
+stimulus.cond1 = mglInstallSound(sounds.cond1);
+stimulus.cond2 = mglInstallSound(sounds.cond2);
+
+
+mglSetSound(stimulus.cond1, 'deviceID', deviceID);
+mglSetSound(stimulus.cond2, 'deviceID', deviceID);
+
 
 
 %% Setup fixation task
@@ -106,9 +114,9 @@ global stimulus
 
 if task.thistrial.thisseg == 1
       %play stim cond 1
-      trialSound = task.thistrial.amplitude*stimulus.sounds.cond1;
+      trialSound = task.thistrial.amplitude*stimulus.cond1;
       soundNum = mglInstallSound(trialSound);
-      mglSetSound(soundNum, 'deviceID', stimulus.deviceID);
+````      mglSetSound(soundNum, 'deviceID', deviceID);
       mglPlaySound(soundNum)
 end
 
@@ -120,9 +128,9 @@ global stimulus
     
     if task.thistrial.thisseg == 1
       %play stim cond 1
-      trialSound = task.thistrial.amplitude*stimulus.sounds.cond2;
+      trialSound = task.thistrial.amplitude*stimulus.cond1;
       soundNum = mglInstallSound(trialSound);
-      mglSetSound(soundNum, 'deviceID', stimulus.deviceID);
+      mglSetSound(soundNum, 'deviceID', deviceID);
       mglPlaySound(soundNum)
     end
     
