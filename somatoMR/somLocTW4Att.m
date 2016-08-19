@@ -2,6 +2,9 @@
 % 
 % Traveling wave localizer. Modified to include fixation cross attention
 % task (c.f. retinotopy) and 4 stimulus locations.
+%
+% Reverse = 0 runs in the normal direction 1-->2-->3-->4
+% Reverse = 1 runs in the reversed direction 4-->3-->2-->1
 
 
 function [myscreen] = somLocTW4Att(reverse)
