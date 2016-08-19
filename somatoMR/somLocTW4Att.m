@@ -1,52 +1,59 @@
+% somLocTW4Att(reverse)
+% 
+% Traveling wave localizer. Modified to include fixation cross attention
+% task (c.f. retinotopy) and 4 stimulus locations.
 
-function [myscreen] = somLocTW()
+
+function [myscreen] = somLocTW4Att(reverse)
 
 %SET DEVICE ID HERE
 deviceID = 5;
 
 
-% check arguments
-if ~any(nargin == [0])
-  help taskTemplate
-  return
-end
+% % check arguments
+% if ~any(nargin == [0])
+%   help taskTemplate
+%   return
+% end
 
 global stimulus
-stimulus.counter = 1; % This keeps track of what "run" we are on.
-stimulus.scan = 1
+stimulus.scan = 1;
+stimulus.reverse = reverse;
 
-
-
-%% Initialize Stimulus
-
-myscreen = initScreen();
-%Stimulus('stimulus',myscreen);
 
 
 
 %% task parameters
 task{1}{1}.waitForBacktick = 1;
-task{1}{1}.seglen = [1 1 1 1 1 1 1]; %TR is actually 1.1, this will synch at each TR
-task{1}{1}.synchToVol = [1 1 1 1 1 1 1];
-task{1}{1}.getResponse = [0 0 0 0 0 0 0];
-task{1}{1}.parameter.stimloc = [1 2 3];
-task{1}{1}.parameter.freq = 30;
+task{1}{1}.seglen = [1 1 1 1 1 1]; %TR is actually 1.1, this will synch at each TR
+task{1}{1}.synchToVol = [1 1 1 1 1 1];
+task{1}{1}.getResponse = [0 0 0 0 0 0];
+task{1}{1}.parameter.stimloc = [1 2 3 4];
+task{1}{1}.parameter.freq = 50;
 
-task{1}{1}.random = 0;
+task{1}{1}.random = 0; %DO NOT RANDOMIZE A TRAVELING WAVE
 
-task{1}{1}.numTrials = 10; % Total volumes: 10 * 6 * 4 = 240 + 16 (calib)
+task{1}{1}.numBlocks = 10; % Total volumes: n * 7 *  3 = 210 for n = 10, 420 for n = 20, + 16 more for cal = 436
 
-%create stims
 
-sounds = makeSomatoWave3();
+%% Initialize Stimulus
+
+myscreen = initScreen('fMRIprojflex');
+%Stimulus('stimulus',myscreen);
+
+%% create stims
+
+sounds = makeSomatoWave4(task{1}{1}.parameter.freq, reverse);
 
 stimulus.cond1 = mglInstallSound(sounds.cond1);
 stimulus.cond2 = mglInstallSound(sounds.cond2);
 stimulus.cond3 = mglInstallSound(sounds.cond3);
+stimulus.cond4 = mglInstallSound(sounds.cond4);
 
 mglSetSound(stimulus.cond1, 'deviceID', deviceID);
 mglSetSound(stimulus.cond2, 'deviceID', deviceID);
 mglSetSound(stimulus.cond3, 'deviceID', deviceID);
+mglSetSound(stimulus.cond4, 'deviceID', deviceID);
 
 
 
@@ -54,9 +61,14 @@ mglSetSound(stimulus.cond3, 'deviceID', deviceID);
 
 %%
 
+%% Setup fixation task
+
+[task{2} myscreen] = fixStairInitTask(myscreen)
+
+
 
 % initialize the task
-for phaseNum = 1:length(task)
+for phaseNum = 1:length(task{1})
   [task{1}{phaseNum} myscreen] = initTask(task{1}{phaseNum},myscreen,@startSegmentCallback,@screenUpdateCallback,[],@startTrialCallback,[],[]);
 end
 
@@ -65,6 +77,7 @@ phaseNum = 1;
 while (phaseNum <= length(task{1})) && ~myscreen.userHitEsc
     % update the task
     [task{1}, myscreen, phaseNum] = updateTask(task{1},myscreen,phaseNum);
+    [task{2}, myscreen, phaseNum] = updateTask(task{2},myscreen,phaseNum);
     % flip screen
     myscreen = tickScreen(myscreen,task);
 end
@@ -81,7 +94,7 @@ mglClearScreen();
 
 function [task myscreen] = startTrialCallback(task,myscreen)
 
-disp('(somato) Running trial.');
+disp(sprintf('(somato) Running at location %i', task.thistrial.stimloc));
 
 function [task myscreen] = startSegmentCallback(task, myscreen)
 
@@ -100,6 +113,11 @@ end
 if task.thistrial.stimloc == 3
     %play stim cond 3
     mglPlaySound(stimulus.cond3)
+end
+
+if task.thistrial.stimloc == 4
+    %play stim cond 4
+    mglPlaySound(stimulus.cond4)
 end
 
 %%

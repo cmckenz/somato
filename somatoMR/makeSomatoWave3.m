@@ -5,17 +5,20 @@
 %          1 reversed stimulus order
 
 
-function [stim] = makeSomatoWave3(stimFreq, reverse)
+function [stim] = makeSomatoWave3(stimFreq, reverse, amp)
 
 onTime = 0.45;
 offTime = 0.1;
 
 sampleRate = 8192;
 
-onWave = sin(stimFreq * ((1:2*pi/(sampleRate - 1): onTime*2*pi)));
+sigBase = (1:(round(onTime*sampleRate)+1))*(2*pi/sampleRate);
+
+onWave = sin(stimFreq * sigBase);
 offWave = zeros(1, floor(offTime*sampleRate));
 
 stimWave = [onWave offWave onWave];
+stimWave = amp*stimWave;
 
 arrayLength = length(stimWave);
 

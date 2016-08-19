@@ -34,7 +34,11 @@ task{1}{1}.parameter.freq = 30;
 
 task{1}{1}.random = 0;
 
+<<<<<<< HEAD
 task{1}{1}.numBlocks = 20; % Total volumes: 20 * 3 * 7 = 420 + 16 (calib) = 436
+=======
+task{1}{1}.numBlocks = 1; % Total volumes: n * 7 *  3 = 210 for n = 10, 420 for n = 20, + 16 more for cal = 436
+>>>>>>> dbeab730f8e86ed36134d5edba98b86c964f20b5
 
 %create stims
 

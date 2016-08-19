@@ -40,7 +40,7 @@ task{1}{1}.parameter.cond = [1 2 3 4];
 
 task{1}{1}.random = 1;
 
-task{1}{1}.numTrials = 50; % Total volumes: 10 * 6 * 4 = 240 + 16 (calib)
+task{1}{1}.numTrials = 999; % Total volumes: 10 * 6 * 4 = 240 + 16 (calib)
 
 %create stims
 

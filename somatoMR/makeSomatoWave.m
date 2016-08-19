@@ -12,7 +12,8 @@ offTime = 0.1;
 
 sampleRate = 8192;
 
-onWave = sin(stimFreq * ((1:2*pi/(sampleRate - 1): onTime*2*pi)));
+tOn = 0:2*pi/(sampleRate):(2*pi * onTime);
+onWave = sin(stimFreq * tOn);
 offWave = zeros(1, floor(offTime*sampleRate));
 
 stimWave = [onWave offWave onWave];
@@ -34,10 +35,6 @@ stim.cond3 = stimArray;
 stim.cond4 = stimArray;
 
 %stimulus sine wave
-
-onLength = length(stimWave);
-
-
 if reverse == 0
 %cycle 1
 stim.cond1(1, :) = stimWave;

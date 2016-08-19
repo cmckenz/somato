@@ -1,0 +1,5 @@
+date,username,time,task,computer,stimfile
+10/11/2015,gru,11-Oct-2015 10:39:05,somatoLocEvent1.m,oban.stanford.edu,~/data/somatoLocEvent1/s316/151011_stim12.mat
+10/11/2015,gru,11-Oct-2015 10:46:34,somatoLocEvent1.m,oban.stanford.edu,~/data/somatoLocEvent1/s316/151011_stim13.mat
+10/11/2015,gru,11-Oct-2015 10:53:51,somatoLocEvent1.m,oban.stanford.edu,~/data/somatoLocEvent1/s316/151011_stim14.mat
+10/11/2015,gru,11-Oct-2015 11:01:16,somatoLocEvent1.m,oban.stanford.edu,~/data/somatoLocEvent1/s316/151011_stim15.mat
