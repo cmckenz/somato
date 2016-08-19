@@ -49,7 +49,7 @@ if reverse == 0
     stim.cond3(3, :) = stimWave;
     
     %cycle 4
-    stim.cond3(4, :) = stimWave;
+    stim.cond4(4, :) = stimWave;
     
     
 end
