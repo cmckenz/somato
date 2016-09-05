@@ -1,9 +1,9 @@
-function [myscreen] = somLoc2StreamAtt()
-%write task-specific callbacks and add to init function and task update
-%calls
+function [myscreen] = somLoc1Att()
+% somLoc1Att
+%
+%One stream (rather than 2 stream parallel) somato amplitude localizer with
+%attention task.
 
-%SET DEVICE ID HERE
-deviceID = 4;
 
 
 % check arguments
@@ -12,7 +12,9 @@ if ~any(nargin == [0])
   return
 end
 
+%SET DEVICE ID HERE
 global stimulus
+stimulus.deviceID = 2;
 stimulus.counter = 1; % This keeps track of what "run" we are on.
 stimulus.scan = 1
 
@@ -20,7 +22,9 @@ stimulus.scan = 1
 
 %% Initialize Stimulus
 
+%myscreen = initScreen('fMRIprojflex');
 myscreen = initScreen('test');
+
 %Stimulus('stimulus',myscreen);
 
 
@@ -47,20 +51,12 @@ task{2}{1} = task{1}{1};
 
 %create stims
 
-sounds = stimCreateOneEvent2Str(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
-
-stimulus.cond1 = mglInstallSound(sounds.cond1);
-stimulus.cond2 = mglInstallSound(sounds.cond2);
-
-
-mglSetSound(stimulus.cond1, 'deviceID', deviceID);
-mglSetSound(stimulus.cond2, 'deviceID', deviceID);
-
+stimulus.sounds = stimCreateOneEvent2Str(task{1}{1}.parameter.condLength, task{1}{1}.parameter.freq);
 
 
 %% Setup fixation task
 
-[task{3} myscreen] = fixStairInitTask(myscreen);
+[task{2} myscreen] = fixStairInitTask(myscreen);
 
 
 %%
@@ -70,7 +66,6 @@ mglSetSound(stimulus.cond2, 'deviceID', deviceID);
 %INIITALIZE ALL TASKS HERE
 for phaseNum = 1:length(task{1})
   [task{1}{phaseNum} myscreen] = initTask(task{1}{phaseNum},myscreen,@startSegmentCallback1,@screenUpdateCallback,[],@startTrialCallback1,[],[]);
-  [task{2}{phaseNum} myscreen] = initTask(task{2}{phaseNum},myscreen,@startSegmentCallback2,@screenUpdateCallback,[],@startTrialCallback2,[],[]);
 end
 
 phaseNum = 1;
@@ -83,7 +78,6 @@ while (phaseNum <= length(task{1})) && ~myscreen.userHitEsc
     % update the task
     [task{1}, myscreen, phaseNum] = updateTask(task{1},myscreen,phaseNum);
     [task{2}, myscreen, phaseNum] = updateTask(task{2},myscreen,phaseNum);
-    [task{3}, myscreen, phaseNum] = updateTask(task{3},myscreen,phaseNum);
     
     % flip screen
     myscreen = tickScreen(myscreen,task);
@@ -104,36 +98,15 @@ function [task myscreen] = startTrialCallback1(task,myscreen)
 disp('(somato) Running trial at location 1.');
 
 
-function [task myscreen] = startTrialCallback2(task,myscreen)
-
-disp('(somato) Running trial at location 2.');
-
 function [task myscreen] = startSegmentCallback1(task, myscreen)
 
 global stimulus
 
 if task.thistrial.thisseg == 1
       %play stim cond 1
-      trialSound = task.thistrial.amplitude*stimulus.cond1;
+      trialSound = task.thistrial.amplitude*stimulus.sounds.cond1;
       soundNum = mglInstallSound(trialSound);
-````      mglSetSound(soundNum, 'deviceID', deviceID);
+      mglSetSound(soundNum, 'deviceID', stimulus.deviceID);
       mglPlaySound(soundNum)
 end
-
-
-function [task myscreen] = startSegmentCallback2(task, myscreen)
-
-global stimulus
-
-    
-    if task.thistrial.thisseg == 1
-      %play stim cond 1
-      trialSound = task.thistrial.amplitude*stimulus.cond1;
-      soundNum = mglInstallSound(trialSound);
-      mglSetSound(soundNum, 'deviceID', deviceID);
-      mglPlaySound(soundNum)
-    end
-    
-
-   
 

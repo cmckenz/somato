@@ -28,7 +28,7 @@ stim.cond2 = stimArray;
 
 %stimulus sine wave
 
-stimWave = sin(stimFreq * ((1:2*pi/(8192 - 1): condLength*2*pi)));
+stimWave = sin(stimFreq * ((0:2*pi/(8192 - 1): condLength*2*pi)));
 onLength = length(stimWave);
 
 %cycle 1

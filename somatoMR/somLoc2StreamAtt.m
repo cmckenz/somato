@@ -12,7 +12,7 @@ if ~any(nargin == [0])
 end
 
 global stimulus
-stimulus.deviceID = 4;
+stimulus.deviceID = 2;
 stimulus.counter = 1; % This keeps track of what "run" we are on.
 stimulus.scan = 1
 
@@ -20,7 +20,7 @@ stimulus.scan = 1
 
 %% Initialize Stimulus
 
-myscreen = initScreen('test');
+myscreen = initScreen('fMRIprojflex');
 %Stimulus('stimulus',myscreen);
 
 
