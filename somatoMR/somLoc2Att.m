@@ -1,4 +1,4 @@
-function [myscreen] = somLoc1Att()
+function [myscreen] = somLoc2Att()
 % somLoc1Att
 %
 %One stream (rather than 2 stream parallel) somato amplitude localizer with
@@ -21,8 +21,8 @@ stimulus.scan = 1
 
 
 %% Initialize Stimulus
-
 myscreen = initScreen('fMRIprojflex');
+%myscreen = initScreen('somato_buttons');
 %myscreen = initScreen('test');
 
 %Stimulus('stimulus',myscreen);
@@ -38,7 +38,11 @@ task{1}{1}.segmax = [2 9];
 task{1}{1}.synchToVol = [0 1];
 task{1}{1}.getResponse = [0 0];
 task{1}{1}.parameter.freq = 80;
+%task{1}{1}.parameter.amplitude = [1];
+
 task{1}{1}.parameter.amplitude = [0.25 0.5 0.75 1];
+task{1}{1}.parameter.side = [-1 1];
+
 
 
 task{1}{1}.random = 1;
@@ -103,10 +107,23 @@ function [task myscreen] = startSegmentCallback1(task, myscreen)
 global stimulus
 
 if task.thistrial.thisseg == 1
+    
+    if task.thistrial.side == -1 %stim on the left
       %play stim cond 1
       trialSound = task.thistrial.amplitude*stimulus.sounds.cond1;
       soundNum = mglInstallSound(trialSound);
       mglSetSound(soundNum, 'deviceID', stimulus.deviceID);
+      disp(sprintf('Delivering stimulus to left side: amplitude = %f', task.thistrial.amplitude))
       mglPlaySound(soundNum)
+    end
+    
+    if task.thistrial.side == 1 %stim on the right
+      %play stim cond 1
+      trialSound = task.thistrial.amplitude*stimulus.sounds.cond2;
+      soundNum = mglInstallSound(trialSound);
+      mglSetSound(soundNum, 'deviceID', stimulus.deviceID);
+      disp(sprintf('Delivering stimulus to right side: amplitude = %f', task.thistrial.amplitude))
+      mglPlaySound(soundNum)
+    end
 end
 

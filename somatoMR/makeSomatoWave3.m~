@@ -5,7 +5,7 @@
 %          1 reversed stimulus order
 
 
-function [stim] = makeSomatoWave3(stimFreq, reverse, amp)
+function [stim] = makeBlockWave(stimFreq, reverse, amp)
 
 onTime = 0.4;
 offTime = 0.2;

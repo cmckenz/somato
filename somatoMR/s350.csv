@@ -11,3 +11,10 @@ date,username,time,task,computer,stimfile
 08/12/2016,gru,12-Aug-2016 15:21:28,stanfordRetinotopy.m,oban.stanford.edu,~/data/mglRetinotopy/s350/160812_stim10.mat
 08/12/2016,gru,12-Aug-2016 15:34:15,mglRetinotopy.m,oban.stanford.edu,~/data/mglRetinotopy/s350/160812_stim11.mat
 08/12/2016,gru,12-Aug-2016 15:40:12,mglRetinotopy.m,oban.stanford.edu,~/data/mglRetinotopy/s350/160812_stim12.mat
+12/07/2016,,07-Dec-2016 20:01:16,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim05.mat
+12/07/2016,gru,07-Dec-2016 20:11:46,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim06.mat
+12/07/2016,gru,07-Dec-2016 20:19:44,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim07.mat
+12/07/2016,gru,07-Dec-2016 20:27:44,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim08.mat
+12/07/2016,gru,07-Dec-2016 20:36:00,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim09.mat
+12/07/2016,gru,07-Dec-2016 20:44:23,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim10.mat
+12/07/2016,gru,07-Dec-2016 20:52:20,somLatMask.m,oban.stanford.edu,~/data/somLatMask/s350/161207_stim11.mat
